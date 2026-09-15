@@ -1,0 +1,4 @@
+import test from "node:test";import assert from "node:assert/strict";import {buildQueries,classify,assess} from "./server.mjs";
+test("builds five identity-specific query groups",()=>{const q=buildQueries({name:"Jane Doe",company:"Acme",title:"CEO"});assert.equal(q.length,5);assert.ok(q.every(x=>x.includes('"Jane Doe"')&&x.includes('"Acme"')))});
+test("classifies wealth indicators",()=>{assert.equal(classify("CEO purchased a mansion"),"Real estate");assert.equal(classify("made a charity pledge at gala"),"Philanthropy & sponsorship")});
+test("grades direct location disclosure as EP relevant",()=>{const r=assess({title:"Jane Doe bought $8 million home",description:"The CEO purchased an estate in Dallas",source:"News",link:"",publishedAt:""},{name:"Jane Doe",company:"",title:"CEO"});assert.equal(r.relevance,"High");assert.ok(r.indicators.includes("Location exposure"))});
